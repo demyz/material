@@ -121,6 +121,11 @@ function mdListItemDirective($mdAria, $mdConstant, $timeout) {
           container = angular.element('<md-button class="md-no-style"><div class="md-list-item-inner"></div></md-button>');
           container[0].setAttribute('ng-click', tEl[0].getAttribute('ng-click'));
           tEl[0].removeAttribute('ng-click');
+
+          if (tEl[0].getAttribute('aria-label')) {
+            container[0].setAttribute('aria-label', tEl[0].getAttribute('aria-label'));
+            tEl[0].removeAttribute('aria-label');
+          }
           container.children().eq(0).append(tEl.contents());
         }
 
@@ -205,8 +210,9 @@ function mdListItemDirective($mdAria, $mdConstant, $timeout) {
 
         if (!hasClick && !proxies.length) {
           firstChild.addEventListener('keypress', function(e) {
-            if (e.target.nodeName != 'INPUT') {
-              if (e.keyCode == $mdConstant.KEY_CODE.SPACE) {
+            if (e.target.nodeName != 'INPUT' && e.target.nodeName != 'TEXTAREA') {
+              var keyCode = e.which || e.keyCode;
+              if (keyCode == $mdConstant.KEY_CODE.SPACE) {
                 firstChild.click();
                 e.preventDefault();
                 e.stopPropagation();

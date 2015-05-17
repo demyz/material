@@ -74,7 +74,7 @@ consistency across your application.
 
 	  <br/>
   <span class="md-body-1">
-  	Note: Base font size is `10px` for easy rem units (1.2rem = 12px). Body font size is `14px`. sp = scaleable pixels.
+  	Note: Base font size is `10px` for easy rem units (1.2rem = 12px). Body font size is `14px`. sp = scalable pixels.
 	</span>
 
   </div>
@@ -111,7 +111,7 @@ consistency across your application.
           <code>.md-button</code>
         </span>
         <div class="docs-output" aria-describedby="body-output">
-		  <p class=".md-button">Medium 14px</p>
+    		  <md-button class="md-raised" style="margin-left:0; margin-right:0;">Medium 14px</md-button>
         </div>
       </li>
       <li layout="row" layout-align="start center">

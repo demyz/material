@@ -12,15 +12,63 @@ describe('mdListItem directive', function() {
 
   it('forwards click events for md-checkbox', inject(function($rootScope) {
     var listItem = setup('<md-list-item><md-checkbox ng-model="modelVal"></md-checkbox></md-list-item>');
-    listItem[0].querySelector('div').click();
-    expect($rootScope.modelVal).toBe(true);
+    var cntr = listItem[0].querySelector('div');
+
+    if (cntr && cntr.click ) {
+      cntr.click();
+      expect($rootScope.modelVal).toBe(true);
+    }
+
   }));
 
   it('forwards click events for md-switch', inject(function($rootScope) {
     var listItem = setup('<md-list-item><md-switch ng-model="modelVal"></md-switch></md-list-item>');
-    listItem[0].querySelector('div').click();
-    expect($rootScope.modelVal).toBe(true);
+    var cntr = listItem[0].querySelector('div');
+
+    if (cntr && cntr.click ) {
+      cntr.click();
+      expect($rootScope.modelVal).toBe(true);
+    }
+
   }));
+
+  it('should convert spacebar keypress events as clicks', inject(function($compile, $rootScope, $mdConstant) {
+      var listItem = setup('<md-list-item><md-checkbox ng-model="modelVal"></md-checkbox></md-list-item>');
+      var checkbox = angular.element(listItem[0].querySelector('md-checkbox'));
+
+      expect($rootScope.modelVal).toBeFalsy();
+      checkbox.triggerHandler({
+        type: 'keypress',
+        keyCode: $mdConstant.KEY_CODE.SPACE
+      });
+      expect($rootScope.modelVal).toBe(true);
+  }));
+
+  it('should not convert spacebar keypress for text areas', inject(function($compile, $rootScope, $mdConstant) {
+      var listItem = setup('<md-list-item><textarea ng-model="modelVal"></md-list-item>');
+      var inputEl = angular.element(listItem[0].querySelector('textarea')[0]);
+
+      expect($rootScope.modelVal).toBeFalsy();
+      inputEl.triggerHandler({
+        type: 'keypress',
+        keyCode: $mdConstant.KEY_CODE.SPACE
+      });
+      expect($rootScope.modelVal).toBeFalsy();
+  }));
+
+  xit('should not convert spacebar keypress for text inputs', inject(function($compile, $rootScope, $mdConstant) {
+
+      var listItem = setup('<md-list-item><input ng-keypress="pressed = true" type="text"></md-list-item>');
+      var inputEl = angular.element(listItem[0].querySelector('input')[0]);
+
+      expect($rootScope.pressed).toBeFalsy();
+      inputEl.triggerHandler({
+        type: 'keypress',
+        keyCode: $mdConstant.KEY_CODE.SPACE
+      });
+      expect($rootScope.pressed).toBe(true);
+  }));
+
 
   it('creates buttons when used with ng-click', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()"><p>Hello world</p></md-list-item>');
@@ -28,6 +76,13 @@ describe('mdListItem directive', function() {
     expect(firstChild.nodeName).toBe('MD-BUTTON');
     expect(firstChild.childNodes[0].nodeName).toBe('DIV');
     expect(firstChild.childNodes[0].childNodes[0].nodeName).toBe('P');
+  });
+
+  it('moves aria-label to primary action', function() {
+    var listItem = setup('<md-list-item ng-click="sayHello()" aria-label="Hello"></md-list-item>');
+    var listItemChildren = listItem.children();
+    expect(listItemChildren[0].nodeName).toBe('MD-BUTTON');
+    expect(listItemChildren.attr('aria-label')).toBe('Hello');
   });
 
   it('moves md-secondary items outside of the button', function() {

@@ -18,7 +18,9 @@ md-toolbar {
   font-size: rem(2.0);
   min-height: $baseline-grid * 8;
   width: 100%;
-  transition: box-shadow $swift-ease-in-out-duration linear;
+  &.md-whiteframe-z1-add, &.md-whiteframe-z1-remove {
+    transition: box-shadow $swift-ease-in-out-duration linear;
+  }
 
   *,
   *:before,
@@ -82,6 +84,9 @@ md-toolbar {
   }
   &> .md-button:first-child {
     margin-left: $icon-button-margin-offset;
+  }
+  &> .md-button:last-child {
+    margin-right: $icon-button-margin-offset;
   }
 
   @media screen and (-ms-high-contrast: active) {
